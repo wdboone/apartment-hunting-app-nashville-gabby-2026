@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏠 Gabby's Apartment Quest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #FF6B9D;
+            --secondary-color: #FEC84D;
+            --accent-color: #6BCCFF;
+            --success-color: #95E1D3;
+            --bg-gradient: linear-gradient(135deg, #FFF5E4 0%, #FFE5EC 50%, #F5E6FF 100%);
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --shadow: 0 8px 32px rgba(255, 107, 157, 0.15);
+            --shadow-hover: 0 12px 40px rgba(255, 107, 157, 0.25);
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: 20px;
+            color: #2D3436;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .header h1 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 3em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #636E72;
+            font-weight: 600;
+        }
+
+        .budget-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--secondary-color), #FFA500);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: var(--shadow);
+            animation: pulse 2s infinite;
+        }
+
+        .section {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            animation: fadeInUp 0.8s ease;
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-5px);
+        }
+
+        .section-title {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.8em;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon {
+            font-size: 1.2em;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: #2D3436;
+            margin-bottom: 8px;
+            font-size: 1.05em;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 14px 18px;
+            border: 3px solid transparent;
+            border-radius: 16px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1em;
+            background: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(255, 107, 157, 0.2);
+            transform: translateY(-2px);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .button {
+            background: linear-gradient(135deg, var(--primary-color), #FF8FB3);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            width: 100%;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .button-secondary {
+            background: linear-gradient(135deg, var(--accent-color), #89D4FF);
+        }
+
+        .button-success {
+            background: linear-gradient(135deg, var(--success-color), #B3F0E1);
+        }
+
+        .button-call {
+            background: linear-gradient(135deg, #10ac84, #1dd1a1);
+            font-size: 1em;
+            padding: 12px 24px;
+        }
+
+        .apartments-list {
+            margin-top: 30px;
+        }
+
+        .apartment-card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            border-left: 6px solid var(--primary-color);
+            transition: all 0.3s ease;
+            animation: slideIn 0.5s ease;
+        }
+
+        .apartment-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+        }
+
+        .apartment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .apartment-name {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.4em;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .apartment-info {
+            margin: 10px 0;
+            line-height: 1.8;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+
+        .delete-btn {
+            background: linear-gradient(135deg, #FF6B6B, #FF8787);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .notes-display {
+            background: linear-gradient(135deg, #FFF9E6, #FFF5CC);
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 12px;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .notes-label {
+            font-weight: 700;
+            color: #E67E22;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #95A5A6;
+        }
+
+        .empty-state-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .tip-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+            padding: 20px;
+            border-radius: 16px;
+            border: 2px solid var(--accent-color);
+            transition: all 0.3s ease;
+        }
+
+        .tip-card:hover {
+            transform: scale(1.03);
+            border-color: var(--primary-color);
+        }
+
+        .tip-title {
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .quick-select-info {
+            background: linear-gradient(135deg, #E8F8F5, #D5F4E6);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--success-color);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .section-title {
+                font-size: 1.4em;
+            }
+
+            .tips-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .neighborhoods-info {
+            margin-top: 20px;
+        }
+
+        .neighborhood-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-color), #89D4FF);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin: 5px;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .quick-stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+            border-radius: 16px;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .stat-number {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: #636E72;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .inline-button {
+            width: auto;
+            padding: 8px 16px;
+            font-size: 0.9em;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏠 Gabby's Apartment Quest</h1>
+            <p class="subtitle">Nashville Adventure 2025 🎸✨</p>
+            <div class="budget-badge">💰 Budget: $1,400 - $1,650/month</div>
+        </div>
+
+        <div class="quick-stats">
+            <div class="stat-box">
+                <div class="stat-number" id="apartmentCount">0</div>
+                <div class="stat-label">Apartments Saved</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">📍</div>
+                <div class="stat-label">The Nations Base</div>
+            </div>
+        </div>
+
+        <!-- Quick Select Apartment Section -->
+        <div class="section">
+            <h2 class="section-title"><span class="icon">⚡</span> Quick Select Apartment</h2>
+            
+            <div class="quick-select-info">
+                <strong>💡 Pro Tip:</strong> Select from 15 popular Nashville apartments to auto-fill the information below, or add your own custom apartment!
+            </div>
+
+            <div class="input-group">
+                <label>🏢 Choose from Popular Apartments</label>
+                <select id="quickSelect" onchange="populateApartment()">
+                    <option value="">-- Select an apartment --</option>
+                    <optgroup label="The Nations">
+                        <option value="nations1">Nations at Lenox Village</option>
+                        <option value="nations2">51Fifty Apartments</option>
+                        <option value="nations3">Haven at Nations</option>
+                        <option value="nations4">The Union Apartments</option>
+                    </optgroup>
+                    <optgroup label="Bellevue">
+                        <option value="bellevue1">Highlands at Bellevue</option>
+                        <option value="bellevue2">One Bellevue Place</option>
+                        <option value="bellevue3">The Parc at Bellevue</option>
+                    </optgroup>
+                    <optgroup label="Germantown">
+                        <option value="germantown1">The Villas at Germantown</option>
+                        <option value="germantown2">Radius Apartments</option>
+                        <option value="germantown3">Germantown Lofts</option>
+                    </optgroup>
+                    <optgroup label="Sylvan Park">
+                        <option value="sylvan1">Sylvan Park Apartments</option>
+                        <option value="sylvan2">The Murphy at Sylvan Park</option>
+                    </optgroup>
+                    <optgroup label="Other Neighborhoods">
+                        <option value="charlotte1">Charlotte Park Flats</option>
+                        <option value="midtown1">West End Towers</option>
+                        <option value="midtown2">Midtown Crossing</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <hr style="margin: 30px 0; border: none; border-top: 2px dashed #E0E0E0;">
+
+            <h3 style="font-family: 'Fredoka', sans-serif; color: var(--accent-color); margin-bottom: 20px;">
+                📝 Apartment Details
+            </h3>
+            
+            <div class="input-group">
+                <label>🏢 Apartment Name</label>
+                <input type="text" id="apartmentName" placeholder="e.g., The Lofts at Nations">
+            </div>
+
+            <div class="input-group">
+                <label>📍 Address</label>
+                <input type="text" id="apartmentAddress" placeholder="123 Main St, Nashville, TN 37208">
+            </div>
+
+            <div class="input-group">
+                <label>📞 Phone Number</label>
+                <input type="tel" id="apartmentPhone" placeholder="(615) 555-1234">
+            </div>
+
+            <div class="input-group">
+                <label>💵 Monthly Rent</label>
+                <input type="text" id="apartmentRent" placeholder="$1,500">
+            </div>
+
+            <div class="input-group">
+                <label>🏘️ Neighborhood</label>
+                <select id="apartmentNeighborhood">
+                    <option value="">Select a neighborhood...</option>
+                    <option value="The Nations">The Nations</option>
+                    <option value="Bellevue">Bellevue</option>
+                    <option value="Germantown">Germantown</option>
+                    <option value="Sylvan Park">Sylvan Park</option>
+                    <option value="Charlotte Park">Charlotte Park</option>
+                    <option value="West End / Midtown">West End / Midtown</option>
+                    <option value="Sylvan Heights">Sylvan Heights</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>🌐 Website (optional)</label>
+                <input type="url" id="apartmentWebsite" placeholder="https://example.com">
+            </div>
+
+            <div class="input-group">
+                <label>✨ Notes & Standout Qualities</label>
+                <textarea id="apartmentNotes" placeholder="What makes this place special? Any pros or cons? First impressions?"></textarea>
+            </div>
+
+            <button class="button" onclick="addApartment()">
+                🎯 Save This Apartment!
+            </button>
+        </div>
+
+        <!-- Google Maps Section -->
+        <div class="section">
+            <h2 class="section-title"><span class="icon">🗺️</span> Explore Nashville Neighborhoods</h2>
+            <p style="margin-bottom: 20px; color: #636E72;">
+                Click any neighborhood below to explore it on Google Maps! Perfect for checking out the area, nearby amenities, and planning your apartment visits. 🚗
+            </p>
+
+            <div class="tips-grid">
+                <div class="tip-card" style="cursor: pointer; border: 3px solid var(--primary-color);" onclick="window.open('https://www.google.com/maps/place/The+Nations,+Nashville,+TN/', '_blank')">
+                    <div class="tip-title">🎨 The Nations</div>
+                    <p>Your home base! Trendy breweries, restaurants, and modern developments.</p>
+                    <button class="button button-secondary" style="margin-top: 15px; font-size: 0.9em; padding: 12px;">
+                        🗺️ Explore Area
+                    </button>
+                </div>
+
+                <div class="tip-card" style="cursor: pointer;" onclick="window.open('https://www.google.com/maps/place/Bellevue,+Nashville,+TN/', '_blank')">
+                    <div class="tip-title">🏡 Bellevue</div>
+                    <p>Suburban, family-friendly with parks and shopping. 10-15 min west.</p>
+                    <button class="button button-secondary" style="margin-top: 15px; font-size: 0.9em; padding: 12px;">
+                        🗺️ Explore Area
+                    </button>
+                </div>
+
+                <div class="tip-card" style="cursor: pointer;" onclick="window.open('https://www.google.com/maps/place/Germantown,+Nashville,+TN/', '_blank')">
+                    <div class="tip-title">🍽️ Germantown</div>
+                    <p>Historic, upscale, walkable. Trendy restaurants, 8-12 min from Nations.</p>
+                    <button class="button button-secondary" style="margin-top: 15px; font-size: 0.9em; padding: 12px;">
+                        🗺️ Explore Area
+                    </button>
+                </div>
+
+                <div class="tip-card" style="cursor: pointer;" onclick="window.open('https://www.google.com/maps/place/Sylvan+Park,+Nashville,+TN/', '_blank')">
+                    <div class="tip-title">🌳 Sylvan Park</div>
+                    <p>Tree-lined streets, family-friendly. Adjacent to Nations, 5 min drive.</p>
+                    <button class="button button-secondary" style="margin-top: 15px; font-size: 0.9em; padding: 12px;">
+                        🗺️ Explore Area
+                    </button>
+                </div>
+
+                <div class="tip-card" style="cursor: pointer;" onclick="window.open('https://www.google.com/maps/place/Charlotte+Park,+Nashville,+TN/', '_blank')">
+                    <div class="tip-title">🆕 Charlotte Park</div>
+                    <p>Growing area with new developments. Close to Nations amenities.</p>
+                    <button class="button button-secondary" style="margin-top: 15px; font-size: 0.9em; padding: 12px;">
+                        🗺️ Explore Area
+                    </button>
+                </div>
+
+                <div class="tip-card" style="cursor: pointer;" onclick="window.open('https://www.google.com/maps/place/Midtown,+Nashville,+TN/', '_blank')">
+                    <div class="tip-title">🎓 West End / Midtown</div>
+                    <p>Urban, near Vanderbilt. Restaurants, bars, and nightlife scene.</p>
+                    <button class="button button-secondary" style="margin-top: 15px; font-size: 0.9em; padding: 12px;">
+                        🗺️ Explore Area
+                    </button>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #E8F8F5, #D5F4E6); border-radius: 16px; border-left: 4px solid var(--success-color);">
+                <strong style="color: var(--primary-color); font-size: 1.1em;">💡 Pro Map Tips:</strong>
+                <ul style="margin-top: 10px; padding-left: 25px; line-height: 2;">
+                    <li>Use Google Maps Street View to see what neighborhoods actually look like</li>
+                    <li>Check "Nearby" for grocery stores, restaurants, and coffee shops</li>
+                    <li>Test commute times during rush hour (7-9 AM, 4-6 PM)</li>
+                    <li>Look for green spaces and parks in the area</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Saved Apartments List -->
+        <div class="section">
+            <h2 class="section-title"><span class="icon">📋</span> Your Saved Apartments</h2>
+            <div class="apartments-list" id="apartmentsList">
+                <div class="empty-state">
+                    <div class="empty-state-icon">🏠</div>
+                    <p>No apartments saved yet! Select from the dropdown or add your own above! 🎉</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Neighborhood Quick Guide -->
+        <div class="section">
+            <h2 class="section-title"><span class="icon">🌆</span> Neighborhood Quick Guide</h2>
+            <div class="neighborhoods-info">
+                <span class="neighborhood-tag">🎨 The Nations - Trendy & Hip</span>
+                <span class="neighborhood-tag">🏡 Bellevue - Family Friendly</span>
+                <span class="neighborhood-tag">🍽️ Germantown - Upscale & Walkable</span>
+                <span class="neighborhood-tag">🌳 Sylvan Park - Tree-Lined Streets</span>
+                <span class="neighborhood-tag">🆕 Charlotte Park - Growing Area</span>
+            </div>
+
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-title">⏱️ Drive Times from The Nations</div>
+                    <ul style="padding-left: 20px; line-height: 1.8;">
+                        <li>Downtown: 5-10 min</li>
+                        <li>Bellevue: 10-15 min</li>
+                        <li>Germantown: 8-12 min</li>
+                        <li>Sylvan Park: 5 min</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-title">✅ Visit Checklist</div>
+                    <ul style="padding-left: 20px; line-height: 1.8;">
+                        <li>Test water pressure</li>
+                        <li>Check cell reception</li>
+                        <li>Look at parking</li>
+                        <li>Ask about maintenance</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-title">💡 Pro Tips</div>
+                    <ul style="padding-left: 20px; line-height: 1.8;">
+                        <li>Act fast in Nashville!</li>
+                        <li>Ask about specials</li>
+                        <li>Check reviews online</li>
+                        <li>Visit at different times</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Pre-populated apartment data
+        const apartmentData = {
+            nations1: {
+                name: "Nations at Lenox Village",
+                address: "5115 Louisiana Ave, Nashville, TN 37209",
+                phone: "(615) 942-8850",
+                rent: "$1,495 - $1,625",
+                neighborhood: "The Nations",
+                website: "https://www.nationsatlenoxvillage.com"
+            },
+            nations2: {
+                name: "51Fifty Apartments",
+                address: "5150 Charlotte Ave, Nashville, TN 37209",
+                phone: "(615) 988-5150",
+                rent: "$1,550 - $1,650",
+                neighborhood: "The Nations",
+                website: "https://www.51fiftyapts.com"
+            },
+            nations3: {
+                name: "Haven at Nations",
+                address: "1001 51st Ave N, Nashville, TN 37209",
+                phone: "(615) 457-3110",
+                rent: "$1,425 - $1,595",
+                neighborhood: "The Nations",
+                website: ""
+            },
+            nations4: {
+                name: "The Union Apartments",
+                address: "5025 Georgia Ave, Nashville, TN 37209",
+                phone: "(615) 645-9200",
+                rent: "$1,475 - $1,625",
+                neighborhood: "The Nations",
+                website: ""
+            },
+            bellevue1: {
+                name: "Highlands at Bellevue",
+                address: "7620 Hwy 70 S, Nashville, TN 37221",
+                phone: "(615) 646-0880",
+                rent: "$1,425 - $1,575",
+                neighborhood: "Bellevue",
+                website: ""
+            },
+            bellevue2: {
+                name: "One Bellevue Place",
+                address: "7620 Highway 70 S, Nashville, TN 37221",
+                phone: "(615) 662-8989",
+                rent: "$1,450 - $1,625",
+                neighborhood: "Bellevue",
+                website: ""
+            },
+            bellevue3: {
+                name: "The Parc at Bellevue",
+                address: "500 Bellevue Rd, Nashville, TN 37221",
+                phone: "(615) 673-9100",
+                rent: "$1,495 - $1,650",
+                neighborhood: "Bellevue",
+                website: ""
+            },
+            germantown1: {
+                name: "The Villas at Germantown",
+                address: "1200 5th Ave N, Nashville, TN 37208",
+                phone: "(615) 891-9400",
+                rent: "$1,595 - $1,750",
+                neighborhood: "Germantown",
+                website: ""
+            },
+            germantown2: {
+                name: "Radius Apartments",
+                address: "1212 Jefferson St, Nashville, TN 37208",
+                phone: "(615) 454-1212",
+                rent: "$1,550 - $1,695",
+                neighborhood: "Germantown",
+                website: ""
+            },
+            germantown3: {
+                name: "Germantown Lofts",
+                address: "711 Monroe St, Nashville, TN 37208",
+                phone: "(615) 678-5555",
+                rent: "$1,575 - $1,725",
+                neighborhood: "Germantown",
+                website: ""
+            },
+            sylvan1: {
+                name: "Sylvan Park Apartments",
+                address: "4505 Murphy Rd, Nashville, TN 37209",
+                phone: "(615) 297-6688",
+                rent: "$1,450 - $1,600",
+                neighborhood: "Sylvan Park",
+                website: ""
+            },
+            sylvan2: {
+                name: "The Murphy at Sylvan Park",
+                address: "4601 Murphy Rd, Nashville, TN 37209",
+                phone: "(615) 463-8900",
+                rent: "$1,495 - $1,625",
+                neighborhood: "Sylvan Park",
+                website: ""
+            },
+            charlotte1: {
+                name: "Charlotte Park Flats",
+                address: "5000 Charlotte Ave, Nashville, TN 37209",
+                phone: "(615) 712-3456",
+                rent: "$1,400 - $1,550",
+                neighborhood: "Charlotte Park",
+                website: ""
+            },
+            midtown1: {
+                name: "West End Towers",
+                address: "3415 West End Ave, Nashville, TN 37203",
+                phone: "(615) 327-9955",
+                rent: "$1,575 - $1,695",
+                neighborhood: "West End / Midtown",
+                website: ""
+            },
+            midtown2: {
+                name: "Midtown Crossing",
+                address: "1900 Church St, Nashville, TN 37203",
+                phone: "(615) 340-7800",
+                rent: "$1,525 - $1,650",
+                neighborhood: "West End / Midtown",
+                website: ""
+            }
+        };
+
+        let apartments = [];
+
+        // Load apartments from localStorage
+        function loadApartments() {
+            const stored = localStorage.getItem('gabbysApartments');
+            if (stored) {
+                apartments = JSON.parse(stored);
+                displayApartments();
+                updateStats();
+            }
+        }
+
+        // Save apartments to localStorage
+        function saveApartments() {
+            localStorage.setItem('gabbysApartments', JSON.stringify(apartments));
+            updateStats();
+        }
+
+        // Populate form with selected apartment data
+        function populateApartment() {
+            const select = document.getElementById('quickSelect');
+            const selectedId = select.value;
+            
+            if (!selectedId) {
+                // Clear form if no selection
+                document.getElementById('apartmentName').value = '';
+                document.getElementById('apartmentAddress').value = '';
+                document.getElementById('apartmentPhone').value = '';
+                document.getElementById('apartmentRent').value = '';
+                document.getElementById('apartmentNeighborhood').value = '';
+                document.getElementById('apartmentWebsite').value = '';
+                return;
+            }
+
+            const data = apartmentData[selectedId];
+            document.getElementById('apartmentName').value = data.name;
+            document.getElementById('apartmentAddress').value = data.address;
+            document.getElementById('apartmentPhone').value = data.phone;
+            document.getElementById('apartmentRent').value = data.rent;
+            document.getElementById('apartmentNeighborhood').value = data.neighborhood;
+            document.getElementById('apartmentWebsite').value = data.website || '';
+            
+            // Scroll to the form
+            document.getElementById('apartmentName').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Add new apartment
+        function addApartment() {
+            const name = document.getElementById('apartmentName').value;
+            const address = document.getElementById('apartmentAddress').value;
+            const phone = document.getElementById('apartmentPhone').value;
+            const rent = document.getElementById('apartmentRent').value;
+            const neighborhood = document.getElementById('apartmentNeighborhood').value;
+            const website = document.getElementById('apartmentWebsite').value;
+            const notes = document.getElementById('apartmentNotes').value;
+
+            if (!name || !address) {
+                alert('Please fill in at least the apartment name and address! 🏢');
+                return;
+            }
+
+            const apartment = {
+                id: Date.now(),
+                name,
+                address,
+                phone,
+                rent,
+                neighborhood,
+                website,
+                notes,
+                dateAdded: new Date().toLocaleDateString()
+            };
+
+            apartments.push(apartment);
+            saveApartments();
+            displayApartments();
+
+            // Clear form
+            document.getElementById('quickSelect').value = '';
+            document.getElementById('apartmentName').value = '';
+            document.getElementById('apartmentAddress').value = '';
+            document.getElementById('apartmentPhone').value = '';
+            document.getElementById('apartmentRent').value = '';
+            document.getElementById('apartmentNeighborhood').value = '';
+            document.getElementById('apartmentWebsite').value = '';
+            document.getElementById('apartmentNotes').value = '';
+
+            // Scroll to list
+            document.getElementById('apartmentsList').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Display apartments
+        function displayApartments() {
+            const listContainer = document.getElementById('apartmentsList');
+            
+            if (apartments.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🏠</div>
+                        <p>No apartments saved yet! Select from the dropdown or add your own above! 🎉</p>
+                    </div>
+                `;
+                return;
+            }
+
+            listContainer.innerHTML = apartments.map(apt => `
+                <div class="apartment-card">
+                    <div class="apartment-header">
+                        <div class="apartment-name">${apt.name}</div>
+                        <button class="delete-btn" onclick="deleteApartment(${apt.id})">🗑️ Delete</button>
+                    </div>
+                    <div class="apartment-info">
+                        <div class="info-row">
+                            <strong>📍 Address:</strong> ${apt.address}
+                        </div>
+                        ${apt.phone ? `
+                            <div class="info-row">
+                                <strong>📞 Phone:</strong> ${apt.phone}
+                            </div>
+                        ` : ''}
+                        ${apt.rent ? `<div class="info-row"><strong>💵 Rent:</strong> ${apt.rent}/month</div>` : ''}
+                        ${apt.neighborhood ? `<div class="info-row"><strong>🏘️ Neighborhood:</strong> ${apt.neighborhood}</div>` : ''}
+                        ${apt.website ? `<div class="info-row"><strong>🌐 Website:</strong> <a href="${apt.website}" target="_blank" style="color: var(--accent-color); text-decoration: none;">${apt.website}</a></div>` : ''}
+                        <div class="info-row"><strong>📅 Added:</strong> ${apt.dateAdded}</div>
+                    </div>
+                    <div class="action-buttons">
+                        ${apt.phone ? `
+                            <a href="tel:${apt.phone}" class="button button-call">
+                                📞 Call Now
+                            </a>
+                        ` : '<div></div>'}
+                        <button class="button button-secondary" onclick="viewOnMap('${apt.address}')">
+                            🗺️ View on Map
+                        </button>
+                    </div>
+                    ${apt.notes ? `
+                        <div class="notes-display">
+                            <span class="notes-label">✨ Your Notes:</span>
+                            <div>${apt.notes}</div>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        // View apartment on map
+        function viewOnMap(address) {
+            const encodedAddress = encodeURIComponent(address);
+            window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank');
+        }
+
+        // Delete apartment
+        function deleteApartment(id) {
+            if (confirm('Are you sure you want to delete this apartment? 🤔')) {
+                apartments = apartments.filter(apt => apt.id !== id);
+                saveApartments();
+                displayApartments();
+            }
+        }
+
+        // Update statistics
+        function updateStats() {
+            document.getElementById('apartmentCount').textContent = apartments.length;
+        }
+
+        // Initialize on page load
+        window.onload = function() {
+            loadApartments();
+        };
+    </script>
+</body>
+</html>
